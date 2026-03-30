@@ -10,7 +10,6 @@ using SportsLeague.Domain.Interfaces.Services;
 
 using SportsLeague.Domain.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -28,11 +27,13 @@ builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
 
 // ── Services ──
 
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 
 // ── AutoMapper ──
