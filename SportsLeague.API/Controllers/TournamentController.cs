@@ -116,5 +116,6 @@ namespace SportsLeague.API.Controllers
             }
             catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
         }
+
     }
 }

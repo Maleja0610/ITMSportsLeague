@@ -15,13 +15,15 @@ namespace SportsLeague.DataAccess.Context
         public DbSet<Referee> Referees => Set<Referee>();
         public DbSet<Tournament> Tournaments => Set<Tournament>();
         public DbSet<TournamentTeam> TournamentTeams => Set<TournamentTeam>();
+        public DbSet<Sponsor> Sponsors => Set<Sponsor>();
+        public DbSet<TournamentSponsor> TournamentSponsor => Set<TournamentSponsor>();
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // ── Team Configuration ──
+            // Team Configuration
             modelBuilder.Entity<Team>(entity =>
             {
                 entity.HasKey(t => t.Id);
@@ -43,7 +45,7 @@ namespace SportsLeague.DataAccess.Context
                       .IsUnique();
             });
 
-            // ── Player Configuration ──
+            // Player Configuration
             modelBuilder.Entity<Player>(entity =>
             {
                 entity.HasKey(p => p.Id);
@@ -75,7 +77,7 @@ namespace SportsLeague.DataAccess.Context
                       .IsUnique();
             });
 
-            // ── Referee Configuration ──
+            // Referee Configuration 
             modelBuilder.Entity<Referee>(entity =>
             {
                 entity.HasKey(r => r.Id);
@@ -94,7 +96,7 @@ namespace SportsLeague.DataAccess.Context
                       .IsRequired(false);
             });
 
-            // ── Tournament Configuration ──
+            // Tournament Configuration 
             modelBuilder.Entity<Tournament>(entity =>
             {
                 entity.HasKey(t => t.Id);
@@ -116,7 +118,7 @@ namespace SportsLeague.DataAccess.Context
                       .IsRequired(false);
             });
 
-            // ── TournamentTeam Configuration ──
+            // TournamentTeam Configuration 
             modelBuilder.Entity<TournamentTeam>(entity =>
             {
                 entity.HasKey(tt => tt.Id);
@@ -142,7 +144,62 @@ namespace SportsLeague.DataAccess.Context
                 // Índice único compuesto: un equipo solo una vez por torneo
                 entity.HasIndex(tt => new { tt.TournamentId, tt.TeamId })
                       .IsUnique();
+
             });
+
+            modelBuilder.Entity<Sponsor>(entity =>
+            {
+                entity.HasKey(s => s.Id);
+                entity.Property(s => s.Name)
+                      .IsRequired();
+                entity.Property(s => s.ContactEmail)
+                      .IsRequired();
+                entity.Property(s => s.Phone)
+                      .IsRequired(false);
+                entity.Property(s => s.WebsiteUrl)
+                      .IsRequired(false);
+                entity.Property(s => s.Category)
+                      .IsRequired();
+                entity.Property(s => s.CreatedAt)
+                      .IsRequired();
+                entity.Property(s => s.UpdatedAt)
+                      .IsRequired(false);
+
+                // índice único en la propiedad Name
+                entity.HasIndex(s => s.Name)
+                      .IsUnique();
+            });
+
+            modelBuilder.Entity<TournamentSponsor>(entity =>
+            {
+                entity.HasKey(ts => ts.Id);
+                entity.Property(ts => ts.ContractAmount)
+                      .IsRequired()
+                      .HasColumnType("decimal(20,2)");
+                entity.Property(ts => ts.JoinedAt)
+                      .IsRequired();
+                entity.Property(tt => tt.CreatedAt)
+                      .IsRequired();
+                entity.Property(tt => tt.UpdatedAt)
+                      .IsRequired(false);
+
+                // Relación con Tournament
+                entity.HasOne(ts => ts.Tournament)
+                      .WithMany(t => t.TournamentSponsors)
+                      .HasForeignKey(ts => ts.TournamentId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Relación con Sponsor
+                entity.HasOne(ts => ts.Sponsor)
+                      .WithMany(s => s.TournamentSponsors)
+                      .HasForeignKey(ts => ts.SponsorId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Índice único compuesto: un sponsor no se puede vincular 2 veces al mismo torneo
+                entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+                      .IsUnique();
+            });
+
         }
     }
 }

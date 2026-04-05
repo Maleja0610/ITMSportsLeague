@@ -25,7 +25,7 @@ namespace SportsLeague.DataAccess.Repositories
                 .Where(t => t.Id == id)
                 .Include(t => t.TournamentTeams)
                     .ThenInclude(tt => tt.Team)
-                //.ThenInclude(t => t.Players)
+                    .ThenInclude(t => t.Players)
                 .FirstOrDefaultAsync();
         }
     }

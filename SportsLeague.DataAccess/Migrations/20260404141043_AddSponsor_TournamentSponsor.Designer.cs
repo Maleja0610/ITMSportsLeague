@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsLeague.DataAccess.Context;
 
@@ -11,9 +12,11 @@ using SportsLeague.DataAccess.Context;
 namespace SportsLeague.DataAccess.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260404141043_AddSponsor_TournamentSponsor")]
+    partial class AddSponsor_TournamentSponsor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,7 +233,7 @@ namespace SportsLeague.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("ContractAmount")
-                        .HasColumnType("decimal(20,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

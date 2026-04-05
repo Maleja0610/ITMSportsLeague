@@ -1,0 +1,11 @@
+﻿using SportsLeague.Domain.Entities;
+
+namespace SportsLeague.Domain.Interfaces.Repositories
+{
+    public interface ITournamentSponsorRepository : IGenericRepository<TournamentSponsor>
+    {
+        Task<TournamentSponsor?> GetByTournamentAndSponsorAsync(int tournamentId, int SponsorId);
+        Task<IEnumerable<TournamentSponsor>> GetByTournamentAsync(int tournamentId);
+        Task<IEnumerable<TournamentSponsor>> GetBySponsorAsync(int sponsorId);
+    }
+}
